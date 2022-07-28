@@ -30,57 +30,30 @@ namespace EmployeePayroll_Ajax.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEmployee(int id=0)
+        public async Task<IActionResult> AddEmployee(int id = 0)
         {
-            if(id == 0)
+            if (id == 0)
             {
                 return View(new EmployeeModel());
             }
             else
             {
-                var emp = await this.context.Employee.FindAsync(id);
-                if(emp == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return View(emp);
-                }
+                return NotFound();
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddEmployee(int Id, [Bind("Emp_Id,Name,Gender,Department,Notes")] EmployeeModel emps)
+        public async Task<IActionResult> AddEmployee([Bind("Emp_Id,Name,Gender,Department,Notes")] EmployeeModel emps)
         {
             if (ModelState.IsValid)
             {
                 //Insert
-                if (Id == 0)
+
+                if (emps != null)
                 {
                     context.Employee.Add(emps);
                     await context.SaveChangesAsync();
-                }
-                // Update
-                else
-                {
-                    try
-                    {
-                        context.Employee.Update(emps);
-                        await context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!EmployeeModelExists(emps.Emp_Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
                 }
                 return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", this.context.Employee.ToList()) });
             }
@@ -117,6 +90,27 @@ namespace EmployeePayroll_Ajax.Controllers
             context.Employee.Remove(emp);
             await context.SaveChangesAsync();
             return Json(new { html = Helper.RenderRazorViewToString(this, "_ViewAll", context.Employee.ToList()) });
+        }
+
+        public async Task<IActionResult> UpdateEmployee(int? id)
+        {
+            var emp = await context.Employee.FindAsync(id);
+            return View(emp);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateEmployee([Bind("Emp_Id,Name,Gender,Department,Notes")] EmployeeModel emps)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Employee.Update(emps);
+                await context.SaveChangesAsync();
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAll", context.Employee.ToList()) });
+            }
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "UpdateEmployee", emps) });
+
         }
 
     }

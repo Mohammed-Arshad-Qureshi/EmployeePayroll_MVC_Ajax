@@ -6,13 +6,17 @@ namespace EmployeePayroll_Ajax.Models
     {
         [Key]
         public int Emp_Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
-        public string Gender { get; set; }
-        [Required]
 
+        [Required(ErrorMessage = "Name Field is Required")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Gender Field is Required")]
+        public string Gender { get; set; }
+
+        [Required(ErrorMessage = "Department Filed is Required")]
         public string Department { get; set; }
+
+        [Required(ErrorMessage = "Notes Filed is Required")]
         public string Notes { get; set; }
 
     }

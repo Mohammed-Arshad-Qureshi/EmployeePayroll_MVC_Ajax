@@ -19,7 +19,6 @@
                 </th>
                 <th>
                     <a onclick="showInPopup('@Url.Action("AddEmployee","Employee",null,Context.Request.Scheme)','New Employee')" class="btn btn-success text-white"><i class="fas faa-random"></i> New Employee</a>
-
                 </th>
             </tr>
         </thead>
@@ -44,10 +43,12 @@
                     <a asp-action="Details" asp-route-id="@item.Emp_Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Emp_Id">Delete</a>*@
                         <div>
-                            <a onclick="showInPopup('@Url.Action("AddEmployee","Employee",new {id=item.Emp_Id},Context.Request.Scheme)','Update Employee')" class="btn btn-info text-white"><i class="fas fa-pencil-alt"></i> Edit</a>
+                            <a onclick="showInPopup('@Url.Action("UpdateEmployee","Employee",new {id=item.Emp_Id},Context.Request.Scheme)','Update Employee')" class="btn btn-info text-white"><i class="fas fa-pencil-alt"></i></a>
                             <form asp-action="Delete" asp-route-id="@item.Emp_Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
                                     <input type="hidden" asp-for="@item.Emp_Id" />
-                                    <input type="submit" value="Delete" class="btn btn-danger" />
+                                   @* <i class="fa-solid fa-trash-arrow-up"></i>
+                                    <input type="submit" value="Delete" class="btn btn-danger"   />*@
+                                    <button class="btn btn-danger text-white" type="submit"> <i class="fa-solid fa-trash-can"></i></button>
                             </form>
               
                         </div>
